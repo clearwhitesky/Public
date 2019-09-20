@@ -2,6 +2,8 @@ import time
 import random
 
 
+# work status (2019_09_20): broken sequence. 'call stack' fixing is in progress....
+
 start_item = ['Potion', 'Bread', 'Cookie']
 special_item = ['Mega potion', 'Elixir', 'Bandage']
 start_weapon = ['Fork', 'Cooking pan', 'Worn dagger']
