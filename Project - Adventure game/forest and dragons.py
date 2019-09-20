@@ -58,7 +58,7 @@ hero['weapon'] = start_weapon[random.randint(0, len(start_weapon) - 1)]
 
 def print_pause(message, delay):
     print(message)
-    # time.sleep(delay - delay + 0.2) # for debugging use only!
+    # time.sleep(delay - delay + 0.1) # for debugging use only!
     time.sleep(delay - delay + 0.5)
 
 
@@ -143,7 +143,6 @@ def collect_item(hero):
                 hero['weapon'] = item
             elif x == '2':
                 print(f"\n>>> You discard {item} ({weaponDict[item]}AP)")
-            return
 
 
 
@@ -360,14 +359,12 @@ def story_board(hero):
     elif hero['story'] == 'town':
         if hero['enter_counter'] == 0:
             walking(hero)
-            return
         if hero['turn'] == 0:
             hero['option'] = "[4] Take a rest in the inn (Not Complete) | [5] Check out the pub (Not Complete) | [6] Leave the town\n"
             print_pause("\n>>> Finally you made it alive to the crowded town.\n", 2)
             if hero['name'] == '':
                 print_pause(">>> While you approaching the town gate, you heard an", 2)
                 print_pause(">>> angry voice. \"Who are you!?\" Shouted the fiercesome guard.\n", 2)
-                
             else:
                 print_pause(f">>> Hi {hero['name']}! Welcome back! How is your quest? Greeted the guards", 2)
                 i = random.randint(0, 1)
