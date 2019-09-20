@@ -116,7 +116,6 @@ def collect_item(hero):
             if hero['bag'] == 'empty':
                 print(f"\n>>> You searched the {hero['enemy']} and found a {item} ({itemDict[item]}HP)")
                 hero['bag'] = item
-                return
             else:
                 print(f"\n>>> You found {item} ({itemDict[item]}HP) from the {hero['enemy']} but you backpack is full.")
                 print(f">>> Do you want to exchange it with your {hero['bag']} ({itemDict[hero['bag']]}HP)?")
@@ -128,10 +127,8 @@ def collect_item(hero):
                 if x == '1':
                     print(f"\n>>> You discard {hero['bag']} ({itemDict[hero['bag']]}HP) from your backpack and took {item} ({itemDict[item]}HP).")
                     hero['bag'] = item
-                    return
                 elif x == '2':
                     print(f"\n>>> You discard {item} ({itemDict[item]}HP)")
-                    return
         else:
             print(f"\n>>> You found weapon from the {hero['enemy']}. Do you want to exchange")
             print(f">>> your {hero['weapon']} ({weaponDict[hero['weapon']]}AP) and equiped the new {item} ({weaponDict[item]}AP)?.")
@@ -143,12 +140,8 @@ def collect_item(hero):
             if x == '1':
                 print(f"\n>>> You discard {hero['weapon']} ({weaponDict[hero['weapon']]}AP) and took the new {item} ({weaponDict[item]}AP).")
                 hero['weapon'] = item
-                return
             elif x == '2':
                 print(f"\n>>> You discard {item} ({weaponDict[item]}AP)")
-            return
-    else:
-        return
 
 
 def attack(hero):
@@ -174,7 +167,6 @@ def attack(hero):
         hero['in_battle'] = 0
         hero['enemy'] = enemy_type[random.randint(0, len(enemy_type) - 1)]
         hero['enemy_health'] = enemyHP[hero['enemy']]
-        return
     if atk != 0:
         print_pause(f">>> That was a good strike! But the {hero['enemy']} ({hero['enemy_health']}HP) is still alive.", 2)
     print_pause(f">>> Now the {hero['enemy']} is getting angry and ready to charging at you!\n", 1)
@@ -190,15 +182,12 @@ def attack(hero):
     if hero['hp'] <= 0:
         hero['finish'] = 'dead'
         ending(hero)
-        return
     else:
         if damage == 0:
             print(f">>> But you evade the attack from the {hero['enemy']}. No damage was done.")
-            return
         else:
             print(f">>> You took {damage} damage from the {hero['enemy']}.")
             print_pause(f">>> You left {hero['hp']}HP", 1)
-            return
 
 
 def run_away(hero):
@@ -217,7 +206,6 @@ def run_away(hero):
         hero['in_battle'] = 0
         hero['enemy'] = enemy_type[random.randint(0, len(enemy_type) - 1)]
         hero['enemy_health'] = enemyHP[hero['enemy']]
-        return
     else:
         damage = random.randint(0, enemyAP[hero['enemy']])
         hero['t_damage'] += damage
@@ -232,7 +220,6 @@ def run_away(hero):
             ending(hero)
         else:
             print(f">>> You left {hero['hp']}HP")
-        return
 
 
 def battle_menu(hero):
