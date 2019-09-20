@@ -6,8 +6,8 @@ start_item = ['Potion', 'Bread', 'Cookie']
 special_item = ['Mega potion', 'Elixir', 'Bandage']
 start_weapon = ['Fork', 'Cooking pan', 'Worn dagger']
 special_weapon = ['Bow & Arrow', 'Spear', 'Axe', 'Excalibur']
-# enemyHP = {'Dog': 10, 'Bandit': 30, 'Zombie': 60, 'Dragon': 80}
-enemyHP = {'Dog': 1, 'Bandit': 1, 'Zombie': 1, 'Dragon': 1} # for debugging use only!
+enemyHP = {'Dog': 10, 'Bandit': 30, 'Zombie': 60, 'Dragon': 80}
+# enemyHP = {'Dog': 1, 'Bandit': 1, 'Zombie': 1, 'Dragon': 1} # for debugging use only!
 enemyAP = {'Dog': 5, 'Bandit': 10, 'Zombie': 15, 'Dragon': 15}
 enemy_type = ['Dog', 'Dog', 'Dog', 'Dog', 'Dog', 'Dog', 'Bandit',
               'Bandit', 'Bandit', 'Bandit', 'Zombie', 'Zombie']
@@ -58,8 +58,8 @@ hero['weapon'] = start_weapon[random.randint(0, len(start_weapon) - 1)]
 
 def print_pause(message, delay):
     print(message)
-    time.sleep(delay - delay + 0.2) # for debugging use only!
-    # time.sleep(delay)
+    # time.sleep(delay - delay + 0.2) # for debugging use only!
+    time.sleep(delay)
 
 
 def print_option(hero):
