@@ -143,7 +143,7 @@ def collect_item(hero):
                 hero['weapon'] = item
             elif x == '2':
                 print(f"\n>>> You discard {item} ({weaponDict[item]}AP)")
-        return
+            return
 
 
 
