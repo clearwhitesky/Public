@@ -59,7 +59,7 @@ hero['weapon'] = start_weapon[random.randint(0, len(start_weapon) - 1)]
 def print_pause(message, delay):
     print(message)
     # time.sleep(delay - delay + 0.2) # for debugging use only!
-    time.sleep(delay - delay + 1)
+    time.sleep(delay - delay + 0.5)
 
 
 def print_option(hero):
