@@ -129,6 +129,7 @@ def collect_item(hero):
                     hero['bag'] = item
                 elif x == '2':
                     print(f"\n>>> You discard {item} ({itemDict[item]}HP)")
+            return
         else:
             print(f"\n>>> You found weapon from the {hero['enemy']}. Do you want to exchange")
             print(f">>> your {hero['weapon']} ({weaponDict[hero['weapon']]}AP) and equiped the new {item} ({weaponDict[item]}AP)?.")
@@ -142,6 +143,8 @@ def collect_item(hero):
                 hero['weapon'] = item
             elif x == '2':
                 print(f"\n>>> You discard {item} ({weaponDict[item]}AP)")
+        return
+
 
 
 def attack(hero):
@@ -167,6 +170,7 @@ def attack(hero):
         hero['in_battle'] = 0
         hero['enemy'] = enemy_type[random.randint(0, len(enemy_type) - 1)]
         hero['enemy_health'] = enemyHP[hero['enemy']]
+        return
     if atk != 0:
         print_pause(f">>> That was a good strike! But the {hero['enemy']} ({hero['enemy_health']}HP) is still alive.", 2)
     print_pause(f">>> Now the {hero['enemy']} is getting angry and ready to charging at you!\n", 1)
