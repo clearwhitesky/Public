@@ -155,7 +155,7 @@ def attack(hero):
     if atk == 0:
         print_pause(f"\n>>> The {hero['enemy']} ({hero['enemy_health']}HP) blocked you attack!", 1)
     else:
-        print_pause(f"\n>>> You strike {hero['enemy']} ({hero['enemy_health']}HP) with a {hero['weapon']}. Dealing {weaponDict[hero['weapon']]}HP damage.", 1)
+        print_pause(f"\n>>> You strike {hero['enemy']} ({hero['enemy_health']}HP) with a {hero['weapon']}. Dealing {atk}HP damage.", 1)
     hero['t_attack'] += atk
     hero['enemy_health'] -= atk
     if hero['enemy_health'] <= 0:
