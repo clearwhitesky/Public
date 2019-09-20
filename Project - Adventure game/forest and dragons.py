@@ -1,8 +1,14 @@
 import time
 import random
 
+'''
+Fixed Log:
+    Command fixed: Walking, checkHealth, checkWeapon, checkBag, collect_item, attack, run_away
+    Menu_fixed: battle_menu
 
-# work status (2019_09_20): broken sequence. 'call stack' fixing is in progress....
+WIP log:
+    navigation_menu
+'''
 
 start_item = ['Potion', 'Bread', 'Cookie']
 special_item = ['Mega potion', 'Elixir', 'Bandage']
@@ -34,7 +40,7 @@ weaponDict = {
     }
 
 hero = {
-    'name': 'Chris', 
+    'name': 'Udacity', 
     'hp': 0,
     'bag': 'empty',
     'weapon': 'empty',
@@ -58,58 +64,54 @@ hero['bag'] = start_item[random.randint(0, len(start_item) - 1)]
 hero['weapon'] = start_weapon[random.randint(0, len(start_weapon) - 1)]
 
 
-def print_pause(message, delay):
+def print_pause(message, delay):  # FIXED
     print(message)
     # time.sleep(delay - delay + 0.1) # for debugging use only!
     time.sleep(delay - delay + 0.5)
 
 
-def print_option(hero):
+def print_option(hero):  # FIXED
     print_pause("\nWhat you decide to do, next?", 1)
     print("[1] Check your health stats | [2] Check weapon |"
           " [3] Check backpack")
     print(hero['option'])
 
 
-def invalid_selection():
+def invalid_selection():  # FIXED
     print("\n>>> Invalid option selected. Please try again.")
 
 
-def checkHealth(hero):
+def checkHealth(hero):  # FIXED
     print(f"\n>>> You current health is {hero['hp']}HP")
     print_option(hero)
 
 
-def checkWeapon(hero):
+def checkWeapon(hero):  # FOXED
     print(f"\n>>> You are equiped with a {hero['weapon']} ({weaponDict[hero['weapon']]}AP)!")
     print_option(hero)
 
 
-def checkBag(hero):
+def checkBag(hero):  # FIXED
     if hero['bag'] == 'empty':
         print("\n>>> Your bag is empty. There is nothing you can use!")
-        print_option(hero)
-        return
     else:
-        print(f"\n>>> You have a {hero['bag']} ({itemDict[hero['bag']]}HP), do you want to use?")
-        x = input("[1] Yes | [2] No\n")
+        print(f"\n>>> You have a {hero['bag']} ({itemDict[hero['bag']]}HP), do you want to use?\n[1] Yes | [2] No")
+        x = input("")
+        while x != '1' and x != '2':
+            invalid_selection()
+            print(f"\n>>> You have a {hero['bag']} ({itemDict[hero['bag']]}HP), do you want to use?\n[1] Yes | [2] No")
+            x = input("")
         if x == '1':
-            new_hp = hero['hp'] + itemDict[hero['bag']]
-            print(f"\n>>> You have used {hero['bag']}. You increase {itemDict[hero['bag']]}HP. Your HP is now {new_hp}.")
+            print(f"\n>>> You have used {hero['bag']}. You increase {itemDict[hero['bag']]}HP. Your HP is now {hero['hp'] + itemDict[hero['bag']] }.")
+            hero['hp'] += itemDict[hero['bag']]
             hero['bag'] = 'empty'
-            hero['hp'] = new_hp
-            print_option(hero)
-            return
         elif x == '2':
             print(f"\n>>> {hero['bag']} not used")
-            print_option(hero)
-            return
-        else:
-            invalid_selection()
-            checkBag(hero)
+    print_option(hero)
+    
 
 
-def collect_item(hero):
+def collect_item(hero):  # FIXED
     luck = random.randint(0, 100)
     if luck > 10:
         item_list = start_item + start_weapon + special_item + special_weapon
@@ -118,8 +120,9 @@ def collect_item(hero):
             if hero['bag'] == 'empty':
                 print(f"\n>>> You searched the {hero['enemy']} and found a {item} ({itemDict[item]}HP)")
                 hero['bag'] = item
+                return
             else:
-                print(f"\n>>> You found {item} ({itemDict[item]}HP) from the {hero['enemy']} but you backpack is full.")
+                print(f"\n>>> You found {item} ({itemDict[item]}HP) from the {hero['enemy']} but your backpack is full.")
                 print(f">>> Do you want to exchange it with your {hero['bag']} ({itemDict[hero['bag']]}HP)?")
                 x = input("[1] Yes | [2] No\n")
                 while x != '1' and x != '2':
@@ -148,7 +151,7 @@ def collect_item(hero):
 
 
 
-def attack(hero):
+def attack(hero):  # FIXED
     i = 0
     while i < 4:
         x = '='
@@ -191,11 +194,11 @@ def attack(hero):
         if damage == 0:
             print(f">>> But you evade the attack from the {hero['enemy']}. No damage was done.")
         else:
-            print(f">>> You took {damage} damage from the {hero['enemy']}.")
+            print(f">>> You took {damage}HP damage from the {hero['enemy']}.")
             print_pause(f">>> You left {hero['hp']}HP", 1)
 
 
-def run_away(hero):
+def run_away(hero):  # FIXED
     luck = random.randint(0, 100)
     print_pause(f"\n>>> Attempting to try to run away", 1)
     i = 3
@@ -227,7 +230,7 @@ def run_away(hero):
             print(f">>> You left {hero['hp']}HP")
 
 
-def battle_menu(hero):
+def battle_menu(hero):  # FIXED
     while True:
         choice = input("(Choose option 1 to 5) ")
         if choice == '1':
@@ -247,67 +250,7 @@ def battle_menu(hero):
             print_option(hero)
 
 
-def navigation_menu(hero):
-    if hero['story'] == 'world':
-        while True:
-            choice = input("(Choose option 1 to 5) ")
-            if choice == '1':
-                checkHealth(hero)
-            elif choice == '2':
-                checkWeapon(hero)
-            elif choice == '3':
-                checkBag(hero)
-            elif choice == '4':
-                hero['story'] = 'forest'
-                hero['enter_counter'] = 0
-                story_board(hero)
-            elif choice == '5':
-                hero['story'] = 'town'
-                hero['enter_counter'] = 0
-                story_board(hero)
-            else:
-                invalid_selection()
-                print_option(hero)
-    elif hero['story'] == 'town':
-        while True:
-            choice = input("(Choose option 1 to 6) ")
-            if choice == '1':
-                checkHealth(hero)
-            elif choice == '2':
-                checkWeapon(hero)
-            elif choice == '3':
-                checkBag(hero)
-            elif choice == '4':
-                hero['story'] = 'inn'
-                story_board(hero)
-            elif choice == '5':
-                hero['story'] = 'pub'
-                story_board(hero)
-            elif choice == '6':
-                hero['story'] = 'world'
-                hero['enter_counter'] = 0
-                story_board(hero)
-            else:
-                invalid_selection()
-                print_option(hero)
-    elif hero['story'] == 'forest':
-        while True:
-            choice = input("(Choose option 1 to 6) ")
-            if choice == '1':
-                checkHealth(hero)
-            elif choice == '2':
-                checkWeapon(hero)
-            elif choice == '3':
-                checkBag(hero)
-            elif choice == '4':
-                hero['story'] = 'world'
-                story_board(hero)
-            elif choice == '5':
-                hero['story'] = 'town'
-                story_board(hero)
-
-
-def walking(hero):
+def walking(hero):  # FIXED
     while True:
         if hero['enter_counter'] == 0:
             hero['enter_counter'] = 1
@@ -329,8 +272,7 @@ def walking(hero):
         battle_menu(hero)
 
 
-
-def ending(hero):
+def ending(hero):  # WIP
     if hero['ending'] == 'dead':
         if hero['name'] == '':
             print('dead')
@@ -343,22 +285,82 @@ def ending(hero):
     return
 
 
-def story_board(hero):
-    if hero['story'] == "intro":
+def navigation_menu(hero):  # WIP
+    if hero['story'] == 'world':  # FIXED
+        while True:
+            choice = input("(Choose option 1 to 5) ")
+            if choice == '1':
+                checkHealth(hero)
+            elif choice == '2':
+                checkWeapon(hero)
+            elif choice == '3':
+                checkBag(hero)
+            elif choice == '4':
+                hero['story'] = 'forest'
+                hero['enter_counter'] = 0
+                story_board(hero)
+            elif choice == '5':
+                hero['story'] = 'town'
+                hero['enter_counter'] = 0
+                story_board(hero)
+            else:
+                invalid_selection()
+                print_option(hero)
+    elif hero['story'] == 'town':  # WIP
+        while True:
+            choice = input("(Choose option 1 to 6) ")
+            if choice == '1':
+                checkHealth(hero)
+            elif choice == '2':
+                checkWeapon(hero)
+            elif choice == '3':
+                checkBag(hero)
+            elif choice == '4':
+                hero['story'] = 'inn'
+                story_board(hero)
+            elif choice == '5':
+                hero['story'] = 'pub'
+                story_board(hero)
+            elif choice == '6':
+                hero['story'] = 'world'
+                hero['enter_counter'] = 0
+                story_board(hero)
+            else:
+                invalid_selection()
+                print_option(hero)
+    elif hero['story'] == 'forest':  # WIP
+        while True:
+            choice = input("(Choose option 1 to 6) ")
+            if choice == '1':
+                checkHealth(hero)
+            elif choice == '2':
+                checkWeapon(hero)
+            elif choice == '3':
+                checkBag(hero)
+            elif choice == '4':
+                hero['story'] = 'world'
+                story_board(hero)
+            elif choice == '5':
+                hero['story'] = 'town'
+                story_board(hero)
+
+
+def story_board(hero):  # WIP
+    if hero['story'] == "intro":  # FIXED
         print_pause("\n\n>>> It is the medieval era. You woke up in a winding woods.", 2)
         print_pause(">>> You felt a great pain in your head and you can't remember", 2)
         print_pause(">>> what happened, where are you and what's your name?", 2)
         hero['story'] = 'world'
         story_board(hero)
         return
-    elif hero['story'] == 'world':
+    elif hero['story'] == 'world':  # FIXED
         print_pause("\n>>> The night fall soon and you saw the eerie dark forest", 2)
         print_pause(">>> towards the north and to your south is a crowded town.", 2)
         hero['option'] = "[4] Head north into the dark woods (Not Complete) | [5] Walk south to the crowded town\n"
         print_option(hero)
         navigation_menu(hero)
         return
-    elif hero['story'] == 'town':
+    elif hero['story'] == 'town':  # WIP
         if hero['enter_counter'] == 0:
             walking(hero)
         if hero['turn'] == 0:
@@ -378,8 +380,8 @@ def story_board(hero):
             print_option(hero)
             navigation_menu(hero)
         return
-    elif hero['story'] == 'forest':
+    elif hero['story'] == 'forest':  # WIP
         return
 
 
-story_board(hero)
+story_board(hero)  # WIP
