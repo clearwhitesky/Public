@@ -59,7 +59,7 @@ hero['weapon'] = start_weapon[random.randint(0, len(start_weapon) - 1)]
 def print_pause(message, delay):
     print(message)
     # time.sleep(delay - delay + 0.2) # for debugging use only!
-    time.sleep(delay)
+    time.sleep(delay - delay + 1)
 
 
 def print_option(hero):
@@ -261,23 +261,18 @@ def navigation_menu(hero):
             choice = input("(Choose option 1 to 5) ")
             if choice == '1':
                 checkHealth(hero)
-                return
             elif choice == '2':
                 checkWeapon(hero)
-                return
             elif choice == '3':
                 checkBag(hero)
-                return
             elif choice == '4':
                 hero['story'] = 'forest'
                 hero['enter_counter'] = 0
                 story_board(hero)
-                return
             elif choice == '5':
                 hero['story'] = 'town'
                 hero['enter_counter'] = 0
                 story_board(hero)
-                return
             else:
                 invalid_selection()
                 print_option(hero)
@@ -286,26 +281,20 @@ def navigation_menu(hero):
             choice = input("(Choose option 1 to 6) ")
             if choice == '1':
                 checkHealth(hero)
-                return
             elif choice == '2':
                 checkWeapon(hero)
-                return
             elif choice == '3':
                 checkBag(hero)
-                return
             elif choice == '4':
                 hero['story'] = 'inn'
                 story_board(hero)
-                return
             elif choice == '5':
                 hero['story'] = 'pub'
                 story_board(hero)
-                return
             elif choice == '6':
                 hero['story'] = 'world'
                 hero['enter_counter'] = 0
                 story_board(hero)
-                return
             else:
                 invalid_selection()
                 print_option(hero)
@@ -314,21 +303,16 @@ def navigation_menu(hero):
             choice = input("(Choose option 1 to 6) ")
             if choice == '1':
                 checkHealth(hero)
-                return
             elif choice == '2':
                 checkWeapon(hero)
-                return
             elif choice == '3':
                 checkBag(hero)
-                return
             elif choice == '4':
                 hero['story'] = 'world'
-
                 story_board(hero)
             elif choice == '5':
                 hero['story'] = 'town'
                 story_board(hero)
-                return
 
 
 def walking(hero):
@@ -378,7 +362,7 @@ def story_board(hero):
     elif hero['story'] == 'world':
         print_pause("\n>>> The night fall soon and you saw the eerie dark forest", 2)
         print_pause(">>> towards the north and to your south is a crowded town.", 2)
-        hero['option'] = "[4] Head north into the dark woods | [5] Walk south to the crowded town\n"
+        hero['option'] = "[4] Head north into the dark woods (Not Complete) | [5] Walk south to the crowded town\n"
         print_option(hero)
         navigation_menu(hero)
         return
@@ -387,7 +371,7 @@ def story_board(hero):
             walking(hero)
             return
         if hero['turn'] == 0:
-            hero['option'] = "[4] Take a rest in the inn | [5] Check out the pub | [6] Leave the town\n"
+            hero['option'] = "[4] Take a rest in the inn (Not Complete) | [5] Check out the pub (Not Complete) | [6] Leave the town\n"
             print_pause("\n>>> Finally you made it alive to the crowded town.\n", 2)
             if hero['name'] == '':
                 print_pause(">>> While you approaching the town gate, you heard an", 2)
