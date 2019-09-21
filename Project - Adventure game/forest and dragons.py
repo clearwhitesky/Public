@@ -14,8 +14,8 @@ start_item = ['Potion', 'Bread', 'Cookie']
 special_item = ['Mega potion', 'Elixir', 'Bandage']
 start_weapon = ['Fork', 'Cooking pan', 'Worn dagger']
 special_weapon = ['Bow & Arrow', 'Spear', 'Axe', 'Excalibur']
-enemyHP = {'Dog': 10, 'Bandit': 30, 'Zombie': 60, 'Dragon': 80}
-# enemyHP = {'Dog': 1, 'Bandit': 1, 'Zombie': 1, 'Dragon': 1} # for debugging use only!
+# enemyHP = {'Dog': 10, 'Bandit': 30, 'Zombie': 60, 'Dragon': 80}
+enemyHP = {'Dog': 1, 'Bandit': 1, 'Zombie': 1, 'Dragon': 1} # for debugging use only!
 enemyAP = {'Dog': 5, 'Bandit': 10, 'Zombie': 15, 'Dragon': 15}
 enemy_type = ['Dog', 'Dog', 'Dog', 'Dog', 'Dog', 'Dog', 'Bandit',
               'Bandit', 'Bandit', 'Bandit', 'Zombie', 'Zombie']
@@ -66,8 +66,8 @@ hero['weapon'] = start_weapon[random.randint(0, len(start_weapon) - 1)]
 
 def print_pause(message, delay):  # FIXED
     print(message)
-    # time.sleep(delay - delay + 0.1) # for debugging use only!
-    time.sleep(delay - delay + 0.5)
+    time.sleep(delay - delay + 0.1) # for debugging use only!
+    # time.sleep(delay - delay + 0.5)
 
 
 def print_option(hero):  # FIXED
@@ -152,10 +152,8 @@ def collect_item(hero):  # FIXED
 
 
 def attack(hero):  # FIXED
-    i = 0
-    while i < 4:
-        x = '='
-        print_pause(f"{x * i}", 0.5)
+    for i in range(4):
+        print_pause(f"{'=' * i}", 0.5)
         i += 1
     print_pause("===》*", 1)
     atk = random.randint(0, weaponDict[hero['weapon']])
@@ -178,10 +176,8 @@ def attack(hero):  # FIXED
     if atk != 0:
         print_pause(f">>> That was a good strike! But the {hero['enemy']} ({hero['enemy_health']}HP) is still alive.", 2)
     print_pause(f">>> Now the {hero['enemy']} is getting angry and ready to charging at you!\n", 1)
-    i = 4
-    while i > 0:
-        x = '='
-        print_pause(f"{x * i}", 0.5)
+    for i in range(4):
+        print(f"{'===='[0:-i]}")
         i -= 1
     print_pause('*\n', 1)
     damage = random.randint(0, enemyAP[hero['enemy']])
@@ -201,10 +197,8 @@ def attack(hero):  # FIXED
 def run_away(hero):  # FIXED
     luck = random.randint(0, 100)
     print_pause(f"\n>>> Attempting to try to run away", 1)
-    i = 3
-    while i > 0:
-        x = '.'
-        print_pause(f"{x * i}", 0.5)
+    for i in range(4):
+        print(f"{'....'[0:-i]}")
         i -= 1
     if luck > 40:
         print(f">>> Successfully ran away!\n")
