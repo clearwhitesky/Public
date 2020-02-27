@@ -461,7 +461,7 @@ def story_board(hero):  # WIP
                 print_pause(f">>> Hi {hero['name']}! Welcome back! How is your quest? Greeted the guards", 2, cGreen)
                 i = random.randint(0, 1)
                 if i == 1:
-                    print_pause(f">>> Head over to the pub and speak with the folks around.", 2, cGreen)
+                    print_pause(f">>> Head over to the pub and speak with the folks around\n.", 2, cGreen)
                 else:
                     print_pause(f">>> It's getting dark soon, you should not wonder around.", 1, cGreen)
                     print_pause(f">>> You can spend a night in the inn if you would like.", 1, cGreen)
