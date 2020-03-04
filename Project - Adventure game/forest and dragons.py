@@ -45,11 +45,11 @@ hero = {
     'hp': 0,
     'bag': 'empty',
     'weapon': 'empty',
-    'story': 'intro',
-    'option': 'empty',
+    'story': 'intro', # keep track player current location
+    'option': 'empty', # option available
     'found_dragon': 0, # Discovered dragon
-    'turn': 0,
-    'enter_counter': 0,
+    'turn': 0, # keep track number of turn to next destination
+    'enter_counter': 0, # keep track of current enemy status
     'in_battle': 0,
     'enemy': 'empty',
     'enemy_health': 0,
@@ -58,8 +58,8 @@ hero = {
     't_damage': 0,
     't_attack': 0,
     't_battle': 0,
-    "sleep_counter": 0,
-    'finish': ''
+    "sleep_counter": 0, # keep track if player visited the inn
+    'finish': '' # keep track player completed status e.g. dead, completed
     }
 
 hero['hp'] = random.randint(20, 80)
@@ -333,13 +333,13 @@ def enter_the_dragon(hero):  # WIP
 
 
 def ending(hero):  # WIP
-    if hero['ending'] == 'dead':
+    if hero['finish'] == 'dead':
         if hero['name'] == '':
             print('dead')
             return
         else:
             return
-    elif hero['ending'] == 'complete':
+    elif hero['finish'] == 'complete':
         if hero['name'] == '':
             print("you won but you still don't know who are you and your past")
     return
@@ -690,4 +690,3 @@ def story_board(hero):  # WIP
             invalid_selection()
 
 story_board(hero)  # WIP
-ending(hero)
