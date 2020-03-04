@@ -10,8 +10,8 @@ cWhite = "\x1b[37m"
 cEnd = "\x1b[0m"
 
 
-start_item = ['Potion', 'Bread', 'Cookie']
-special_item = ['Mega potion', 'Elixir', 'Bandage']
+start_item = ['Potion', 'Bread', 'Cookie', 'Bandage']
+special_item = ['Mega potion', 'Elixir', 'Big potion']
 start_weapon = ['Fork', 'Cooking pan', 'Worn dagger']
 special_weapon = ['Bow & Arrow', 'Spear', 'Axe', 'Excalibur']
 # enemyHP = {'Dog': 10, 'Bandit': 30, 'Zombie': 60, 'Dragon': 80}
@@ -22,7 +22,8 @@ enemy_type = ['Dog', 'Dog', 'Dog', 'Dog', 'Dog', 'Dog', 'Bandit',
 
 itemDict = {
     'Elixir': 50,
-    'Mega potion': 10,
+    'Mega potion': 25,
+    'Big potion': 15,
     'Bandage': 7,
     'Potion': 5,
     'Bread': 3,
@@ -148,6 +149,50 @@ def collect_item(hero):  # FIXED
             elif x == '2':
                 print(cGreen + "\n >>> You discard [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]" + cEnd)
 
+def treasure_chest(hero):
+    luck = random.randint(0,1) # pick item = 0 or weapon = 1
+    print_pause("\n >>> You walked to the end of the forest and found a [" + cYellow + "Treasure chest" + cGreen + "].", 0, cGreen)
+    if luck == 0:
+        item = random.choice(special_item)
+        if hero['bag'] == 'empty':
+            print_pause(">>> You open up the treasure chest and took [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "].", 0 ,cGreen)
+            hero['bag'] = item
+        else:
+            print_pause(">>> You open the treasure chest and found a [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]." , 0, cGreen)
+            print_pause(">>> Do you want to exchange your [" + cYellow + f"{hero['bag']} +{itemDict[hero['bag']]}HP" + cGreen + "] with [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]?", 0, cGreen)
+            print(cWhite + " [1] Yes | [2] No\n" + cEnd)
+            print(cBlue + " (Choose option 1 or 2)" + cEnd)
+            x = input(" > ")
+            while x != '1' and x != '2':
+                invalid_selection()
+                print_pause(">>> Do you want to exchange your [" + cYellow + f"{hero['bag']} +{itemDict[hero['bag']]}HP" + cGreen + "] with [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]?", 0, cGreen)
+                print(cWhite + " [1] Yes | [2] No\n" + cEnd)
+                print(cBlue + " (Choose option 1 or 2)" + cEnd)
+                x = input(" > ")
+            if x == '1':
+                print(cGreen + "\n >>> You discard [" + cYellow + f"{hero['bag']} +{itemDict[hero['bag']]}HP" + cGreen + "] and took [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]." + cEnd)
+                hero['bag'] = item
+            elif x == '2':
+                print(cGreen + "\n >>> You discard [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]" + cEnd)
+    elif luck == 1:
+        item = random.choice(special_weapon)
+        print_pause(">>> You open the treasure chest and found a [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]." , 0, cGreen)
+        print_pause(">>> Do you want to exchange your [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] with [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]?", 0, cGreen)
+        print(cWhite + " [1] Yes | [2] No\n" + cEnd)
+        print(cBlue + " (Choose option 1 or 2)" + cEnd)
+        x = input(" > ")
+        while x != '1' and x != '2':
+            invalid_selection()
+            print_pause(">>> Do you want to exchange your [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] with [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]?", 0, cGreen)
+            print(cWhite + " [1] Yes | [2] No\n" + cEnd)
+            print(cBlue + " (Choose option 1 or 2)" + cEnd)
+            x = input(" > ")
+        if x == '1':
+            print(cGreen + "\n >>> You discard [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] and took [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]." + cEnd)
+            hero['weapon'] = item
+        elif x == '2':
+            print(cGreen + "\n >>> You discard [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]" + cEnd)
+
 
 def attack(hero):  # FIXED
     for i in range(4):
@@ -265,6 +310,28 @@ def walking(hero):  # FIXED
         battle_menu(hero)
 
 
+def enter_the_dragon(hero):  # WIP
+    while True:
+        if hero['enter_counter'] == 0:
+            hero['enter_counter'] = 1
+            hero['t_battle'] += 1
+            hero['turn'] = random.randint(0, 3)
+            hero['enemy'] = enemy_type[random.randint(0, len(enemy_type) - 1)]
+            hero['enemy_health'] = enemyHP[hero['enemy']]
+            hero['in_battle'] = 0
+        hero['option'] = f"[4] Attack the {hero['enemy']} ({hero['enemy_health']}HP) | [5] Try to run away\n"
+        if hero['turn'] == 0:
+            return
+        if hero['in_battle'] == 0:
+            hero['in_battle'] = 1
+            print(cGreen + "\n >>> The " + cYellow + f"{hero['story']}" + cGreen + " is far away and you need " + cYellow + f"{hero['turn']}" + cGreen + " days to reach.")
+            print(cGreen + f" >>> While traveling to the " + cYellow + f"{hero['story']}" + cGreen + ", suddenly a [" + cYellow + f"{hero['enemy']} {hero['enemy_health']}HP" + cGreen + "] appeared!\n" + cEnd)
+        else:
+            print(cGreen + f"\n >>> The [" + cYellow + f"{hero['enemy']} {hero['enemy_health']}HP" + cGreen + "] never seem wanting to give up!\n")
+        print_option(hero)
+        battle_menu(hero)
+
+
 def ending(hero):  # WIP
     if hero['ending'] == 'dead':
         if hero['name'] == '':
@@ -278,7 +345,7 @@ def ending(hero):  # WIP
     return
 
 
-def navigation_menu(hero):  # WIP
+def navigation_menu(hero):  # FIXED
     if hero['story'] == 'world':
         while True:
             print_pause(f"\n (Choose option 1 to 5)", 0, cBlue)
@@ -369,8 +436,10 @@ def navigation_menu(hero):  # WIP
                 checkBag(hero)
             elif choice == '4':
                 hero['story'] = 'forest'
+                hero['enter_counter'] = 0
             elif choice == '5':
                 hero['story'] = 'town'
+                hero['enter_counter'] = 0
             else:
                 invalid_selection()
             print_option(hero)
@@ -568,15 +637,57 @@ def story_board(hero):  # WIP
         
     elif hero['story'] == 'forest':  # WIP
         if hero['found_dragon'] == 0:
-            return
-        if hero['found_dragon'] == 1:
-            print("Found Dragon")
-            return
+            if hero['enter_counter'] == 0:
+                walking(hero)
+            if hero['turn'] == 0:
+                treasure_chest(hero)
+                print_pause("\n >>> Strangely you end up outside the " + cYellow + "town" + cGreen + ". What do you want enter?", 0, cGreen)
+                print(cWhite + " [1] Yes | [2] No\n" + cEnd)
+                print(cBlue + " (Choose option 1 or 2)" + cEnd)
+                x = input(" > ")
+                while x != '1' and x != '2':
+                    invalid_selection()
+                    print_pause(">>> Do you want to enter the " + cYellow + "town" + cGreen + "?", 0, cGreen)
+                    print(cWhite + " [1] Yes | [2] No\n" + cEnd)
+                    print(cBlue + " (Choose option 1 or 2)" + cEnd)
+                    x = input(" > ")
+                if x == '1':
+                    hero['story'] = 'town'
+                    hero['enter_counter'] = 1
+                    hero['turn'] = 0
+                    story_board(hero)
+                elif x == '2':
+                    hero['option'] = "[4] Head north into the dark woods | [5] Walk into the crowded town"
+                    print("")
+                    print_option(hero)
+                    print(cBlue + "\n (Choose option 1 or 5)" + cEnd)
+                    x = input(" > ")
+                    while x != "1" and x != "2" and x != "3" and x != "4" and x != "5":
+                        invalid_selection()
+                        print_option(hero)
+                        print(cBlue + "\n (Choose option 1 or 5)" + cEnd)
+                        x = input(" > ")
+                    if x == "1":
+                        checkHealth(hero)
+                    elif x == "2":
+                        checkWeapon(hero)
+                    elif x == "3":
+                        checkBag(hero)
+                    elif x == "4":
+                        hero['enter_counter'] = 0
+                        story_board(hero)
+                    elif x == "5":
+                        hero['story'] = 'town'
+                        hero['enter_counter'] = 1
+                        hero['turn'] = 0
+                        story_board(hero)
+        elif hero['found_dragon'] == 1:
+            if hero['enter_counter'] == 0:
+                enter_the_dragon(hero)
+            if hero['turn'] == 0:
+                ending(hero)
         else:
             invalid_selection()
-            return
-        print_option(hero)
-        navigation_menu(hero)
 
 story_board(hero)  # WIP
 ending(hero)
