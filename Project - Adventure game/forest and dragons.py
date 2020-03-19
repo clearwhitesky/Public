@@ -716,7 +716,7 @@ def story_board(hero):
             else:
                 print_pause("\n >>> The pub is closed.\n", 0, cGreen)
         else:
-            i = random.randint(1, 3)
+            i = random.randint(0, 1)
             if i == 1:
                 print_pause("\n >>> You overhead rumors that there is a Powerful dragon in the forest and she will grant you any wish if you defented her!\n", 0, cGreen)
                 hero['found_dragon'] = 1
