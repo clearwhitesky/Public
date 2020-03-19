@@ -13,8 +13,8 @@ start_item = ['Potion', 'Bread', 'Cookie', 'Bandage']
 special_item = ['Mega potion', 'Elixir', 'Big potion']
 start_weapon = ['Fork', 'Cooking pan', 'Worn dagger']
 special_weapon = ['Bow & Arrow', 'Spear', 'Axe', 'Excalibur']
-# enemyHP = {'Dog': 10, 'Bandit': 30, 'Zombie': 60, 'Dragon': 80}
-enemyHP = {'Dog': 1, 'Bandit': 1, 'Zombie': 1, 'Dragon': 1} # for debugging use only!
+enemyHP = {'Dog': 10, 'Bandit': 30, 'Zombie': 60, 'Dragon': 80}
+# enemyHP = {'Dog': 1, 'Bandit': 1, 'Zombie': 1, 'Dragon': 1} # for debugging use only!
 enemyAP = {'Dog': 5, 'Bandit': 10, 'Zombie': 15, 'Dragon': 20}
 enemy_type = ['Dog', 'Dog', 'Dog', 'Dog', 'Dog', 'Dog', 'Bandit',
               'Bandit', 'Bandit', 'Bandit', 'Zombie', 'Zombie']
@@ -40,35 +40,35 @@ weaponDict = {
     }
 
 hero = {}
-playAgain  = 1
 
-def settingUp(hero):    
-    hero['name'] = 'NoName' # Player name
+
+def settingUp(hero):
+    hero['name'] = 'NoName'  # Player name
     hero['hp'] = random.randint(20, 80)
     hero['bag'] = start_item[random.randint(0, len(start_item) - 1)]
     hero['weapon'] = start_weapon[random.randint(0, len(start_weapon) - 1)]
-    hero['story'] =  'intro' # keep track player current location
-    hero['option'] = 'empty' # option available
-    hero['found_dragon'] = 0 # Discovered dragon
-    hero['turn'] = 0 # keep track number of turn to next destination
-    hero['enter_counter'] = 0 # keep track of current enemy status
+    hero['story'] = 'intro'  # keep track player current location
+    hero['option'] = 'empty'  # option available
+    hero['found_dragon'] = 0  # Discovered dragon
+    hero['turn'] = 0  # keep track number of turn to next destination
+    hero['enter_counter'] = 0  # keep track of current enemy status
     hero['in_battle'] = 0
     hero['enemy'] = 'empty'
     hero['enemy_health'] = 0
     hero['kill'] = 0
-    hero['escape']  = 0
+    hero['escape'] = 0
     hero['t_damage'] = 0
     hero['t_attack'] = 0
     hero['t_battle'] = 0
-    hero["sleep_counter"] = 0 # keep track if player visited the inn
-    hero['finish'] = '' # keep track player completed status e.g. dead, completed
-
+    hero['playAgain'] = 1
+    hero["sleep_counter"] = 0  # keep track if player visited the inn
+    hero['finish'] = ''  # keep track player completed status e.g. dead, completed
 
 
 def print_pause(message, delay, color):
     print(color, message, '\x1b[0m')
-    time.sleep(delay - delay + 0.1)  # for debugging use only!
-    # time.sleep(delay - delay + 0.5)
+    # time.sleep(delay - delay + 0.1)  # for debugging use only!
+    time.sleep(delay - delay + 0.2)
 
 
 def print_option(hero):
@@ -115,51 +115,55 @@ def checkBag(hero):
 
 
 def collect_item(hero):
-    luck = random.randint(0, 100)
-    if luck > 10:
-        item_list = start_item + start_weapon + special_item + special_weapon
-        item = random.choice(item_list)
-        if item in itemDict:
-            if hero['bag'] == 'empty':
-                print(cGreen + "\n >>> You searched the dead " + cYellow + f"{hero['enemy']}" + cGreen + " and found a [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]." + cEnd)
-                hero['bag'] = item
+    if hero['found_dragon'] == 1:
+        return
+    else:
+        luck = random.randint(0, 100)
+        if luck > 10:
+            item_list = start_item + start_weapon + special_item + special_weapon
+            item = random.choice(item_list)
+            if item in itemDict:
+                if hero['bag'] == 'empty':
+                    print(cGreen + "\n >>> You searched the dead " + cYellow + f"{hero['enemy']}" + cGreen + " and found a [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]." + cEnd)
+                    hero['bag'] = item
+                else:
+                    print(cGreen + "\n >>> You found [" + cYellow + f"{item} {itemDict[item]}HP" + cGreen + "] from the " + cYellow + f"{hero['enemy']}" + cGreen + " but your backpack is full." + cEnd)
+                    print(cGreen + " >>> Do you want to exchange it with your [" + cYellow + f"{hero['bag']} {itemDict[hero['bag']]}HP" + cGreen + "]?" + cEnd)
+                    x = input(" [1] Yes | [2] No\n > ")
+                    while x != '1' and x != '2':
+                        invalid_selection()
+                        print(cGreen + " >>> Do you want to exchange your [" + cYellow + f"{hero['bag']} {itemDict[hero['bag']]}HP" + cGreen + "] with the [" + cYellow + f"{item} {itemDict[item]}HP" + cGreen + "]?" + cEnd)
+                        x = input(" [1] Yes | [2] No\n > ")
+                    if x == '1':
+                        print(cGreen + "\n >>> You discard [" + cYellow + f"{hero['bag']} {itemDict[hero['bag']]}HP" + cGreen + "] from your backpack and took [" + cYellow + f"{item} {itemDict[item]}HP" + cGreen + "]." + cEnd)
+                        hero['bag'] = item
+                    elif x == '2':
+                        print(cGreen + "\n >>> You discard [" + cYellow + f"{item} {itemDict[item]}HP" + cGreen + "]." + cEnd)
             else:
-                print(cGreen + "\n >>> You found [" + cYellow + f"{item} {itemDict[item]}HP" + cGreen + "] from the " + cYellow + f"{hero['enemy']}" + cGreen + " but your backpack is full." + cEnd)
-                print(cGreen + " >>> Do you want to exchange it with your [" + cYellow + f"{hero['bag']} {itemDict[hero['bag']]}HP" + cGreen + "]?" + cEnd)
+                print(cGreen + "\n >>> You found a weapon from the " + cYellow + f"{hero['enemy']}" + cGreen + ". Do you want to exchange" + cEnd)
+                print(cGreen + " >>> your [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] and equiped the new [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]?" + cEnd)
                 x = input(" [1] Yes | [2] No\n > ")
                 while x != '1' and x != '2':
                     invalid_selection()
-                    print(cGreen + " >>> Do you want to exchange your [" + cYellow + f"{hero['bag']} {itemDict[hero['bag']]}HP" + cGreen + "] with the [" + cYellow + f"{item} {itemDict[item]}HP" + cGreen + "]?" + cEnd)
+                    print(cGreen + " >>> Do you want to drop your [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] and equiped the new [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]?." + cEnd)
                     x = input(" [1] Yes | [2] No\n > ")
                 if x == '1':
-                    print(cGreen + "\n >>> You discard [" + cYellow + f"{hero['bag']} {itemDict[hero['bag']]}HP" + cGreen + "] from your backpack and took [" + cYellow + f"{item} {itemDict[item]}HP" + cGreen + "]." + cEnd)
-                    hero['bag'] = item
+                    print(cGreen + "\n >>> You discard [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] and took the new [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]." + cEnd)
+                    hero['weapon'] = item
                 elif x == '2':
-                    print(cGreen + "\n >>> You discard [" + cYellow + f"{item} {itemDict[item]}HP" + cGreen + "]." + cEnd)
-        else:
-            print(cGreen + "\n >>> You found a weapon from the " + cYellow + f"{hero['enemy']}" + cGreen + ". Do you want to exchange" +cEnd)
-            print(cGreen + " >>> your [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] and equiped the new [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]?" + cEnd)
-            x = input(" [1] Yes | [2] No\n > ")
-            while x != '1' and x != '2':
-                invalid_selection()
-                print(cGreen + " >>> Do you want to drop your [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] and equiped the new [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]?." + cEnd)
-                x = input(" [1] Yes | [2] No\n > ")
-            if x == '1':
-                print(cGreen + "\n >>> You discard [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] and took the new [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]." + cEnd)
-                hero['weapon'] = item
-            elif x == '2':
-                print(cGreen + "\n >>> You discard [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]" + cEnd)
+                    print(cGreen + "\n >>> You discard [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]" + cEnd)
+
 
 def treasure_chest(hero):
-    luck = random.randint(0,1) # pick item = 0 or weapon = 1
+    luck = random.randint(0, 1)  # pick item = 0 or weapon = 1
     print_pause("\n >>> You walked to the end of the forest and found a [" + cYellow + "Treasure chest" + cGreen + "].", 0, cGreen)
     if luck == 0:
         item = random.choice(special_item)
         if hero['bag'] == 'empty':
-            print_pause(">>> You open up the treasure chest and took [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "].", 0 ,cGreen)
+            print_pause(">>> You open up the treasure chest and took [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "].", 0, cGreen)
             hero['bag'] = item
         else:
-            print_pause(">>> You open the treasure chest and found a [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]." , 0, cGreen)
+            print_pause(">>> You open the treasure chest and found a [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "].", 0, cGreen)
             print_pause(">>> Do you want to exchange your [" + cYellow + f"{hero['bag']} +{itemDict[hero['bag']]}HP" + cGreen + "] with [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]?", 0, cGreen)
             print(cWhite + " [1] Yes | [2] No\n" + cEnd)
             print(cBlue + " (Choose option 1 or 2)" + cEnd)
@@ -177,7 +181,7 @@ def treasure_chest(hero):
                 print(cGreen + "\n >>> You discard [" + cYellow + f"{item} +{itemDict[item]}HP" + cGreen + "]" + cEnd)
     elif luck == 1:
         item = random.choice(special_weapon)
-        print_pause(">>> You open the treasure chest and found a [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]." , 0, cGreen)
+        print_pause(">>> You open the treasure chest and found a [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "].", 0, cGreen)
         print_pause(">>> Do you want to exchange your [" + cYellow + f"{hero['weapon']} {weaponDict[hero['weapon']]}AP" + cGreen + "] with [" + cYellow + f"{item} {weaponDict[item]}AP" + cGreen + "]?", 0, cGreen)
         print(cWhite + " [1] Yes | [2] No\n" + cEnd)
         print(cBlue + " (Choose option 1 or 2)" + cEnd)
@@ -210,12 +214,16 @@ def attack(hero):
     if hero['enemy_health'] <= 0:
         print(cGreen + f" >>> The " + cYellow + f"{hero['enemy']}" + cGreen + " is dead by your one hit critial strike!")
         collect_item(hero)
-        print_pause(f">>> And you continue your journey...", 1, cGreen)
         hero['kill'] += 1
         hero['turn'] -= 1
         hero['in_battle'] = 0
+        if hero['enemy'] == 'Dragon':
+            hero['finish'] = 'complete'
+            ending(hero)
+            return
         hero['enemy'] = enemy_type[random.randint(0, len(enemy_type) - 1)]
         hero['enemy_health'] = enemyHP[hero['enemy']]
+        print_pause(f">>> And you continue your journey...", 1, cGreen)
         return
     if atk != 0:
         print_pause(cGreen + f">>> That was a good strike! But the [" + cYellow + f"{hero['enemy']} {hero['enemy_health']}HP" + cGreen + f"] is still alive.", 2, cGreen)
@@ -245,13 +253,20 @@ def run_away(hero):
         print(cRed + f"{' ....'[0:-i]}" + cEnd)
         i -= 1
     if luck > 40:
-        print(cRed + " >>> Successfully ran away!\n" + cEnd)
-        print_pause(f">>> And you continue your journey...", 1, cGreen)
-        hero['escape'] += 1
-        hero['turn'] -= 1
-        hero['in_battle'] = 0
-        hero['enemy'] = enemy_type[random.randint(0, len(enemy_type) - 1)]
-        hero['enemy_health'] = enemyHP[hero['enemy']]
+        if hero['enemy'] == 'Dragon':
+            print(f" >>> You have successfully ran away from the deadly dragon")
+            print(f" >>> and entered into the southern town.")
+            hero['story'] = 'town'
+            story_board(hero)
+            return
+        else:
+            print(cRed + " >>> Successfully ran away!\n" + cEnd)
+            print_pause(f">>> And you continue your journey...", 1, cGreen)
+            hero['escape'] += 1
+            hero['turn'] -= 1
+            hero['in_battle'] = 0
+            hero['enemy'] = enemy_type[random.randint(0, len(enemy_type) - 1)]
+            hero['enemy_health'] = enemyHP[hero['enemy']]
     else:
         damage = random.randint(0, enemyAP[hero['enemy']])
         hero['t_damage'] += damage
@@ -301,14 +316,17 @@ def walking(hero):
         hero['option'] = f"[4] Attack the {hero['enemy']} ({hero['enemy_health']}HP) | [5] Try to run away\n"
         if hero['turn'] == 0:
             return
-        if hero['in_battle'] == 0:
-            hero['in_battle'] = 1
-            print(cGreen + "\n >>> The " + cYellow + f"{hero['story']}" + cGreen + " is far away and you need " + cYellow + f"{hero['turn']}" + cGreen + " days to reach.")
-            print(cGreen + f" >>> While traveling to the " + cYellow + f"{hero['story']}" + cGreen + ", suddenly a [" + cYellow + f"{hero['enemy']} {hero['enemy_health']}HP" + cGreen + "] appeared!\n" + cEnd)
+        if hero['finish'] == 'dead':
+            return
         else:
-            print(cGreen + f"\n >>> The [" + cYellow + f"{hero['enemy']} {hero['enemy_health']}HP" + cGreen + "] never seem wanting to give up!\n")
-        print_option(hero)
-        battle_menu(hero)
+            if hero['in_battle'] == 0:
+                hero['in_battle'] = 1
+                print(cGreen + "\n >>> The " + cYellow + f"{hero['story']}" + cGreen + " is far away and you need " + cYellow + f"{hero['turn']}" + cGreen + " days to reach.")
+                print(cGreen + f" >>> While traveling to the " + cYellow + f"{hero['story']}" + cGreen + ", suddenly a [" + cYellow + f"{hero['enemy']} {hero['enemy_health']}HP" + cGreen + "] appeared!\n" + cEnd)
+            else:
+                print(cGreen + f"\n >>> The [" + cYellow + f"{hero['enemy']} {hero['enemy_health']}HP" + cGreen + "] never seem wanting to give up!\n")
+            print_option(hero)
+            battle_menu(hero)
 
 
 def fight_dragon(hero):
@@ -332,10 +350,28 @@ def fight_dragon(hero):
 
 def ending(hero):
     if hero['finish'] == 'dead':
-        if hero['name'] == '':
-            print('dead')
+        print_pause("_____.___.           /\                ________                     .___", 1, cGreen)
+        print_pause("\__  |   | ____  __ _)/______   ____   \______ \   ____ _____     __| _/", 1, cGreen)
+        print_pause(" /   |   |/  _ \|  |  \_  __ \_/ __ \   |    |  \_/ __ \\\\__  \   / __ | ", 1, cGreen)
+        print_pause(" \____   (  <_> )  |  /|  | \/\  ___/   |    `   \  ___/ / __ \_/ /_/ | ", 1, cGreen)
+        print_pause(" / ______|\____/|____/ |__|    \___  > /_______  /\___  >____  /\____ | ", 1, cGreen)
+        print_pause(" \/                                \/          \/     \/     \/      \/ \n", 1, cGreen)
+        print_pause(cGreen + "\n[Press any key to continue]\n", 1, cEnd)
+        input('')
+        print_pause("====================================", 1, cGreen)
+        print_pause("Total battle fought: " + cYellow + f"{hero['t_battle']}", 1, cGreen)
+        print_pause("Total damaged took: " + cYellow + f"{hero['t_damage']}", 1, cGreen)
+        print_pause("Total damaged caused: " + cYellow + f"{hero['t_attack']}", 1, cGreen)
+        print_pause("====================================\n", 1, cGreen)
+        print_pause("Do you want play again? 1 - Yes / 2 - No", 1, cBlue)
+        x = input(" > ")
+        if x == '1':
+            hero['story'] = 'end'
+            hero['playAgain'] = 1
             return
-        else:
+        elif x == '2':
+            hero['story'] = 'end'
+            hero['playAgain'] = 0
             return
     elif hero['finish'] == 'complete':
         print(cGreen + "\n >>> You have defeated the dragon and you saw a bright light right infront of you.")
@@ -343,24 +379,29 @@ def ending(hero):
             print(cGreen + " >>> Although the dragon is dead you know your past but you don't remember your name!\n")
         else:
             print(cGreen + " >>> Now you remember your past and everyone know you are " + cYellow + f"{hero['name']}" + cGreen + " the dragon slyer!\n")
-        print(cGreen + "====================================")
-        print(cGreen + "Total battle fought: " + cYellow + f"{hero['t_battle']}")
-        print(cGreen + "Total damaged took: " + cYellow + f"{hero['t_damage']}")
-        print(cGreen + "Total damaged caused: " + cYellow + f"{hero['t_attack']}")
-        print(cGreen + "====================================\n")
-        print(cGreen + "Thank you for playiing.\n")
-        print("do you want play again? 1 - yes / 2 - No")
+        print_pause(cGreen + "\n[Press any key to continue]\n", 1, cEnd)
+        input('')
+        print_pause("====================================", 1, cGreen)
+        print_pause("Total battle fought: " + cYellow + f"{hero['t_battle']}", 1, cGreen)
+        print_pause("Total damaged took: " + cYellow + f"{hero['t_damage']}", 1, cGreen)
+        print_pause("Total damaged caused: " + cYellow + f"{hero['t_attack']}", 1, cGreen)
+        print_pause("====================================\n", 1, cGreen)
+        print_pause("___________.__                   __     _____.___.             ", 1, cGreen)
+        print_pause("\__    ___/|  |__ _____    ____ |  | __ \__  |   | ____  __ __ ", 1, cGreen)
+        print_pause("  |    |   |  |  \\\\__  \  /    \|  |/ /  /   |   |/  _ \|  |  \\", 1, cGreen)
+        print_pause("  |    |   |   Y  \/ __ \|   |  \    <   \____   (  <_> )  |  /", 1, cGreen)
+        print_pause("  |____|   |___|  (____  /___|  /__|_ \  / ______|\____/|____/ ", 1, cGreen)
+        print_pause("                \/     \/     \/     \/  \/                    ", 1, cGreen)
+        print_pause("                        For Playing!\n", 1, cGreen)
+        print_pause("Do you want play again? 1 - Yes / 2 - No", 1, cBlue)
         x = input(" > ")
         if x == '1':
             hero['story'] = 'end'
-            playAgain = 1
-            hero['hp'] = random.randint(20, 80)
-            hero['bag'] = start_item[random.randint(0, len(start_item) - 1)]
-            hero['weapon'] = start_weapon[random.randint(0, len(start_weapon) - 1)]
+            hero['playAgain'] = 1
             return
         elif x == '2':
             hero['story'] = 'end'
-            playAgain = 0
+            hero['playAgain'] = 0
             return
         else:
             invalid_selection()
@@ -474,7 +515,7 @@ def navigation_menu(hero):
             else:
                 invalid_selection()
                 print_option(hero)
-    elif hero['story'] == 'forest':  # WIP
+    elif hero['story'] == 'forest':
         while True:
             print_pause(f"(Choose option 1 to 5)", 0, cBlue)
             choice = input(' > ')
@@ -487,28 +528,32 @@ def navigation_menu(hero):
             elif choice == '4':
                 hero['story'] = 'forest'
                 hero['enter_counter'] = 0
+                story_board(hero)
+                return
             elif choice == '5':
                 hero['story'] = 'town'
                 hero['enter_counter'] = 0
+                story_board(hero)
+                return
             else:
                 invalid_selection()
-            print_option(hero)
+                print_option(hero)
 
 
-def story_board(hero):  # WIP
+def story_board(hero):
     if hero['story'] == "intro":
-        # print_pause("\n ++++++++++++++++++++++++++++++++++++++++++", 1, cGreen)
-        # print_pause("+ ____|                   |     _ )      +", 1, cGreen)
-        # print_pause("+ |    _ \   __| _ \  __| __|   _ \ \    +", 1, cGreen)
-        # print_pause("+ __| (   | |    __/\__ \ |    ( `  <    +", 1, cGreen)
-        # print_pause("+_|  \___/ _|  \___|____/\__| \___/\/    +", 1, cGreen)
-        # print_pause("+                                        +", 1, cGreen)
-        # print_pause("+ __ \                                   +", 1, cGreen)
-        # print_pause("+ |   |  __| _` |  _` |  _ \  __ \   __| +", 1, cGreen)
-        # print_pause("+ |   | |   (   | (   | (   | |   |\__ \ +", 1, cGreen)
-        # print_pause("+____/ _|  \__,_|\__, |\___/ _|  _|____/ +", 1, cGreen)
-        # print_pause("+                |___/                   +", 1, cGreen)
-        # print_pause("++++++++++++++++++++++++++++++++++++++++++", 1, cGreen)
+        print_pause("\n ++++++++++++++++++++++++++++++++++++++++++", 1, cGreen)
+        print_pause("+ ____|                   |     _ )      +", 1, cGreen)
+        print_pause("+ |    _ \   __| _ \  __| __|   _ \ \    +", 1, cGreen)
+        print_pause("+ __| (   | |    __/\__ \ |    ( `  <    +", 1, cGreen)
+        print_pause("+_|  \___/ _|  \___|____/\__| \___/\/    +", 1, cGreen)
+        print_pause("+                                        +", 1, cGreen)
+        print_pause("+ __ \                                   +", 1, cGreen)
+        print_pause("+ |   |  __| _` |  _` |  _ \  __ \   __| +", 1, cGreen)
+        print_pause("+ |   | |   (   | (   | (   | |   |\__ \ +", 1, cGreen)
+        print_pause("+____/ _|  \__,_|\__, |\___/ _|  _|____/ +", 1, cGreen)
+        print_pause("+                |___/                   +", 1, cGreen)
+        print_pause("++++++++++++++++++++++++++++++++++++++++++", 1, cGreen)
         print(cGreen + " Press [" + cYellow + "ENTER" + cGreen + "] key to continue" + cEnd)
         input('')
         print_pause(">>> It is the medieval era. You woke up in a winding woods.", 2, cGreen)
@@ -517,14 +562,12 @@ def story_board(hero):  # WIP
         hero['story'] = 'world'
         story_board(hero)
 
-        
     elif hero['story'] == 'world':
         print_pause("\n >>> The night fall soon and you saw the eerie dark forest", 2, cGreen)
         print_pause(">>> towards the north and to your south is a crowded town.\n", 2, cGreen)
         hero['option'] = "[4] Head north into the dark woods | [5] Walk south to the crowded town"
         print_option(hero)
         navigation_menu(hero)
-
 
     elif hero['story'] == 'town':  # WIP
         if hero['enter_counter'] == 0:
@@ -572,21 +615,21 @@ def story_board(hero):  # WIP
                             hero['name'] = i
                             hero['option'] = "[4] Take a rest in the inn | [5] Check out the pub | [6] Leave the town\n"
                             i = random.randint(0, 1)
-                            print_pause(f">>> Howdy {hero['name']}! What bring you here?", 2, cGreen)
+                            print_pause(f" >>> Howdy {hero['name']}! What bring you here?", 2, cGreen)
                             if i == 1:
-                                print_pause(f">>> Head over to the pub and speak with the folks around.\n", 2, cGreen)
+                                print_pause(f" >>> Head over to the pub and speak with the folks around.\n", 2, cGreen)
                             else:
-                                print_pause(f">>> It's getting dark soon, you should not wonder around.", 1, cGreen)
-                                print_pause(f">>> You can spend a night in the inn if you would like.\n", 1, cGreen)
+                                print_pause(f" >>> It's getting dark soon, you should not wonder around.", 1, cGreen)
+                                print_pause(f" >>> You can spend a night in the inn if you would like.\n", 1, cGreen)
                     elif x == '2':
                         hero['name'] = 'stranger'
-                        print_pause(f"\n >>> Hey Stranger! State your purpose here! Shouted the guards.\n", 2, cGreen)
+                        print_pause(f">>> Hey Stranger! State your purpose here! Shouted the guards.\n", 2, cGreen)
                         hero['option'] = "[4] Visit the Inn | [5] Take a look in the Pub | [6] Leave town\n"
             elif hero['name'] == 'stranger':
-                print_pause(f"\n>>> Hey Stranger! State your purpose here! Shouted the guards.\n", 2, cGreen)
+                print_pause(f">>> Hey Stranger! State your purpose here! Shouted the guards.\n", 2, cGreen)
                 hero['option'] = "[4] Visit the Inn | [5] Take a look in the Pub | [6] Leave town\n"
             else:
-                print_pause(f">>> Hi {hero['name']}! Welcome back! How is your quest? Greeted the guards", 2, cGreen)
+                print_pause(f" >>> Hi {hero['name']}! Welcome back! How is your quest? Greeted the guards", 2, cGreen)
                 i = random.randint(0, 1)
                 if i == 1:
                     print_pause(f">>> Head over to the pub and speak with the folks around\n.", 2, cGreen)
@@ -596,7 +639,6 @@ def story_board(hero):  # WIP
         print_option(hero)
         navigation_menu(hero)
         return
-
 
     elif hero['story'] == 'inn':
         if hero['sleep_counter'] == 0:
@@ -666,16 +708,15 @@ def story_board(hero):  # WIP
         print_option(hero)
         navigation_menu(hero)
 
-
     elif hero['story'] == 'pub':
         if hero['found_dragon'] == 1:
-            i = random.randint(0,1)
+            i = random.randint(0, 1)
             if i == 1:
                 print_pause("\n >>> You don't find anything interesting here.\n", 0, cGreen)
             else:
                 print_pause("\n >>> The pub is closed.\n", 0, cGreen)
         else:
-            i = random.randint(1,3)
+            i = random.randint(1, 3)
             if i == 1:
                 print_pause("\n >>> You overhead rumors that there is a Powerful dragon in the forest and she will grant you any wish if you defented her!\n", 0, cGreen)
                 hero['found_dragon'] = 1
@@ -686,7 +727,6 @@ def story_board(hero):  # WIP
         navigation_menu(hero)
         return
 
-        
     elif hero['story'] == 'forest':
         if hero['found_dragon'] == 0:
             if hero['enter_counter'] == 0:
@@ -749,13 +789,13 @@ def story_board(hero):  # WIP
                     print(cGreen + f"\n >>> The [" + cYellow + f"{hero['enemy']} {hero['enemy_health']}HP" + cGreen + "] never seem wanting to give up!\n")
                 print_option(hero)
                 battle_menu(hero)
-                if hero['enemy'] != 'Dragon':
-                    hero['finish'] = 'complete'
-                    ending(hero)
-                    return
+                return
     elif hero['story'] == 'end':
         return
 
-while playAgain == 1:
+
+settingUp(hero)
+
+while hero['playAgain'] == 1:
     settingUp(hero)
     story_board(hero)
