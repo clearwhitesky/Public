@@ -1,20 +1,19 @@
 // Select color input
-var makeGridColor;
+// embedded in clickColor Function
 
 // Select size input
-
 var makeGridHeight;
 var makeGridWidth;
+
 
 // When size is submitted by the user, call makeGrid()
 $('#sizePicker').submit(function (event) {
     event.preventDefault();
     makeGridHeight = $('#inputHeight').val();
     makeGridWidth = $('#inputWidth').val();
-    makeGridColor = $('colorPicker').val();
     makeGrid(makeGridHeight, makeGridWidth)
+    clickColor();
 })
-
 
 function makeGrid(makeGridHeight, makeGridWidth) {
     $('tr').remove();
@@ -23,8 +22,13 @@ function makeGrid(makeGridHeight, makeGridWidth) {
         for (var j = 1; j <= makeGridWidth; j++) {
             $('#table' + i).append('<td></td>');
         }
-        $(this).click(function(event) {$(this).attr('style', 'background-color:' + makeGridColor().val);
-    }
-
     }
 }
+
+// Add color to cell
+function clickColor() {
+    $('td').click( event => {
+        let makeGridColor = $('#colorPicker').val();
+        $(event.currentTarget).css("background-color", makeGridColor)
+    });
+};
